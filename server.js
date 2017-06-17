@@ -32,19 +32,26 @@ server.on('request', function(req, res){
 
   if (match) {
     console.log(match);
-    var value = currencies[match[1]];
-    if(value){
-      fs.readFile('currencies.html', 'utf8', function(error, contents){
-        var output = contents.replace('$content', `the value is ${value}`);
-        res.write(output);
-        res.end();
+    parser.mapFile('rate.csv', function(err, rows){
+      var value = rows.find(function(row){
+        return row.currency === match[1];
       });
-    }
-    else{
-      res.statusCode = 400;
-      res.write('Not a valid input');
-      res.end();
-    }
+
+      if(value){
+        fs.readFile('currencies.html', 'utf8', function(error, contents){
+          var output = contents.replace('$content', "the value is" + value.value);
+          res.write(output);
+          res.end();
+        });
+      }
+      else{
+        res.statusCode = 400;
+        res.write('Not a valid input');
+        res.end();
+      }
+
+    });
+
   }
   else {
     // read file system to find index.html - write to response with the contents
