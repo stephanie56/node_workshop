@@ -5,6 +5,22 @@
   </head>
   <body>
     <h1>heyyyy you</h1>
-    <p>git Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos enim atque quam maiores expedita libero voluptates natus! Quam mollitia eaque, necessitatibus numquam fuga ab eius id optio, eos saepe, harum.</p>
+    <input type="text" id="currency">
+    <input type="button" id="button" value="heyy">
+
+    <script>
+    var input = document.getElementById('currency');
+    var button = document.getElementById('button');
+
+    button.addEventListener('click', function(){
+      var url = '/currencies/CAD';
+      fetch(url).then(function(res){
+        res.json().then(function(json){
+          console.log(json);
+        });
+      });
+    });
+
+    </script>
   </body>
 </html>
