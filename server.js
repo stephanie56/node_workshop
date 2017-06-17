@@ -38,11 +38,14 @@ server.on('request', function(req, res){
       });
 
       if(value){
-        fs.readFile('currencies.html', 'utf8', function(error, contents){
-          var output = contents.replace('$content', "the value is" + value.value);
-          res.write(output);
-          res.end();
-        });
+        res.setHeader('Content-Type', 'application/json');
+        res.write(JSON.stringify(value), 'utf-8');
+        res.end();
+        // var output = {
+        //   currency:
+        // }
+        // res.write(output);
+        // res.end();
       }
       else{
         res.statusCode = 400;
