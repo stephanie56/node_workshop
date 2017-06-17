@@ -6,6 +6,8 @@ var fs = require('fs');
 
 var csv = require('node-csv');
 
+var querystring = require('querystring');
+
 var parser = csv.createParser();
 
 // create a new server instance
@@ -36,6 +38,14 @@ server.on('request', function(req, res){
       var value = rows.find(function(row){
         return row.currency === match[1];
       });
+
+      var q = res.url.split('?')[1];
+
+      if(q){
+        var amount = querystring.parse(q);
+        console.log(amount);
+        parseFloat(amount.value) * value.value;
+      }
 
       if(value){
         res.setHeader('Content-Type', 'application/json');
