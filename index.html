@@ -5,18 +5,23 @@
   </head>
   <body>
     <h1>heyyyy you</h1>
+    <p id="output">
+
+    </p>
     <input type="text" id="currency">
     <input type="button" id="button" value="heyy">
 
     <script>
     var input = document.getElementById('currency');
     var button = document.getElementById('button');
+    var output = document.getElementById('output');
 
     button.addEventListener('click', function(){
-      var url = '/currencies/CAD';
+      var url = `/currencies/${input.value}`;
       fetch(url).then(function(res){
         res.json().then(function(json){
           console.log(json);
+          output.innerHTML = `1 USD = ${json.value} ${json.currency}`;
         });
       });
     });
