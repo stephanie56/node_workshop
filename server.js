@@ -4,16 +4,14 @@ var http = require('http');
 // file system
 var fs = require('fs');
 
+var csv = require('node-csv');
+
+var parser = csv.createParser();
+
 // create a new server instance
 var server = http.createServer();
 
 var re = /^\/currencies\/(\w+)/
-
-var currencies = {
-  'CAD': 1.3,
-  'GBP': 0.78,
-  'USD': 1
-}
 
 // listening to some events: e.g. if open a new browser will return a client obj
 // the server is an instance of eventemiter, meaning it has an on method for listening for events
@@ -35,8 +33,18 @@ server.on('request', function(req, res){
   if (match) {
     console.log(match);
     var value = currencies[match[1]];
-    res.write(`the value is ${value}`);
-    res.end();
+    if(value){
+      fs.readFile('currencies.html', 'utf8', function(error, contents){
+        var output = contents.replace('$content', `the value is ${value}`);
+        res.write(output);
+        res.end();
+      });
+    }
+    else{
+      res.statusCode = 400;
+      res.write('Not a valid input');
+      res.end();
+    }
   }
   else {
     // read file system to find index.html - write to response with the contents
